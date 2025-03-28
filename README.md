@@ -1,2 +1,2 @@
 # webkert
-Webfejlesztési keretrendszerekhez készül Zenemegosztó webalkalmazás.
+Webfejlesztési keretrendszerekhez készült Zenemegosztó webalkalmazás.
