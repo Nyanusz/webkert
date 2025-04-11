@@ -1,0 +1,8 @@
+<mat-card *ngIf="zene">
+  <mat-card-title>{{ zene.cim }}</mat-card-title>
+  <mat-card-content>
+    <p>Hossz: {{ zene.hossz | zenehossz }}</p>
+    <p>Előadó ID: {{ zene.eloadoId }}</p>
+    <p>Album ID: {{ zene.albumId }}</p>
+  </mat-card-content>
+</mat-card>

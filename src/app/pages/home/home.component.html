@@ -1,1 +1,26 @@
-<p>home works!</p>
+<section class="home">
+
+  <div class="container">
+    <img src="img/logo3.png" >
+    <h1>Üdvözöllek a SoundClone-on</h1>
+    <p>Please Login or Register to share your musics with your friends</p>
+
+    <mat-card>
+      <mat-card-title>Zenei kínálatunk:</mat-card-title>
+      <app-filter (filterChanged)="applyFilter($event)"></app-filter>
+      <mat-list>
+        <mat-list-item
+          *ngFor="let song of filteredSongs"
+          (click)="selectSong(song)"
+          [ngClass]="{'selected': song.id === selectedSong?.id}"
+          [ngStyle]="{'font-weight': song.hossz > 200 ? 'bold' : 'normal'}">
+          <span>{{ song.cim }} - {{ song.artistNev }} | {{ song.hossz / 60 }} perc</span>
+          <mat-icon>play_arrow</mat-icon>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+
+
+  </div>
+</section>
