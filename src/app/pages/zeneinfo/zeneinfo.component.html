@@ -2,7 +2,10 @@
   <mat-card-title>{{ zene.cim }}</mat-card-title>
   <mat-card-content>
     <p>Hossz: {{ zene.hossz | zenehossz }}</p>
-    <p>Előadó ID: {{ zene.eloadoId }}</p>
+    <p>Előadó: {{ zene.artistNev }}</p>
     <p>Album ID: {{ zene.albumId }}</p>
   </mat-card-content>
 </mat-card>
+<div *ngIf="!zene" class="not-found">
+  <p>A keresett dal nem található.</p>
+</div>

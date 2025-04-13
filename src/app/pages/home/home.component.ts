@@ -1,22 +1,21 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import {MatCard, MatCardSmImage, MatCardTitle} from '@angular/material/card';
+import {MatCard, MatCardImage, MatCardSmImage, MatCardTitle} from '@angular/material/card';
 import {MatDivider, MatList, MatListItem} from '@angular/material/list';
 import {MatIcon} from '@angular/material/icon';
 import {Zenek} from '../../shared/models/Zenek';
 import {ZenekService} from '../../shared/services/zenek.service';
 import {FilterComponent} from '../filter/filter.component';
 import {ZenehosszPipe} from '../../shared/pipes/zenehossz.pipe';
-import {NgClass, NgForOf, NgStyle} from '@angular/common';
-import {Eloado} from '../../shared/models/Eloado';
+import {NgClass, NgForOf, } from '@angular/common';
 import {EloadokService} from '../../shared/services/eloadok.service';
-import {combineLatest, map, Observable} from 'rxjs';
+import {combineLatest, map} from 'rxjs';
 
 @Component({
   selector: 'app-home',
   imports: [MatButtonModule, MatCardTitle, MatList, MatListItem,
-    MatIcon, FilterComponent,  NgClass, NgStyle, MatDivider, MatCard, NgForOf],
+    MatIcon, FilterComponent, NgClass, MatDivider, MatCard, NgForOf, ZenehosszPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -29,7 +28,9 @@ export class HomeComponent implements OnInit {
 
   constructor(private songService: ZenekService ,
               private eloadoService: EloadokService ,
-              private router: Router) {}
+              private router: Router) {
+
+  }
 
   ngOnInit() {
     combineLatest([
@@ -37,11 +38,15 @@ export class HomeComponent implements OnInit {
       this.eloadoService.getEloado()
     ]).pipe(
       map(([songs, artists]) => {
-        return songs.map(song => ({
-          ...song,
-          artistNev: artists.find(artist => artist.id === song.eloadoId)?.nev || 'Ismeretlen',
-
-        }));
+        return songs.map(song => {
+          if (!song.cim) {
+            console.warn('Hiányzó cim a dalnál:', song);
+          }
+          return {
+            ...song,
+            artistNev: artists.find(artist => artist.id === song.eloadoId)?.nev || 'Ismeretlen',
+          };
+        }).filter(song => !!song.cim); // Szűrjük ki a hibás dalokat
       })
     ).subscribe(combineLatest => {
       this.zenek = combineLatest;
@@ -50,9 +55,11 @@ export class HomeComponent implements OnInit {
   }
 
   applyFilter(filter: string) {
-    this.filteredSongs = this.zenek.filter(song =>
-      song.cim.toLowerCase().includes(filter.toLowerCase())
-    );
+    this.filteredSongs = this.zenek.filter(song => {
+      const cimMatch = song.cim ? song.cim.toLowerCase().includes(filter.toLowerCase()) : false;
+      const artistMatch = song.artistNev ? song.artistNev.toLowerCase().includes(filter.toLowerCase()) : false;
+      return cimMatch || artistMatch;
+    });
   }
 
   selectSong(song: Zenek) {
@@ -61,5 +68,5 @@ export class HomeComponent implements OnInit {
   }
 
   protected readonly ZenehosszPipe = ZenehosszPipe;
-  protected readonly combineLatest = combineLatest;
+
 }

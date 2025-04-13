@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import {FormGroup, FormControl, Validators, ReactiveFormsModule, FormBuilder} from '@angular/forms';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatCard} from '@angular/material/card';
+import {MatCard, MatCardTitle} from '@angular/material/card';
 import {NgIf} from '@angular/common';
 import {MatButton} from '@angular/material/button';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,9 @@ import {MatButton} from '@angular/material/button';
     MatInput,
     MatFormField,
     MatButton,
+    MatCardTitle,
+    MatProgressSpinnerModule,
+
   ],
   styleUrls: ['./login.component.scss']
 })
@@ -48,7 +52,7 @@ export class LoginComponent{
 
       setTimeout(() => {
         window.location.href = '/home';
-      }, 300);
+      }, 2);
     } else {
       this.error = 'Hibás email vagy jelszó!';
     }

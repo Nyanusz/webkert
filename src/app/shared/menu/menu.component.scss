@@ -1,71 +1,66 @@
-nav {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-ul {
-  display: flex;
-  list-style: none;
-  align-items: center;
-  margin-block-start: 0;
-  margin-block-end: 0;
-  gap: 30px;
-}
-
-mat-sidenav-container {
+.sidenavbar {
+  background-color: #007bff;
   height: 100%;
-}
+  padding: 16px;
 
-mat-toolbar{
-  background-color: #2b69ff;
-  color: white;
-  mat-icon {
-    color: white;
-    vertical-align: middle;
+  mat-nav-list {
+    a.mat-list-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: white;
+      }
+
+      span {
+        flex: 1;
+      }
+
+      &:hover {
+        background-color: #739cff;
+      }
+
+      &.active-list-item {
+        background-color: #ffffff;
+        color: #007bff;
+        font-weight: bold;
+
+        mat-icon {
+          color: #007bff;
+        }
+      }
+    }
   }
-}
-
-mat-sidenav {
-  border-radius: 0;
-}
-
-nav ul li {
-  display: flex;
-  align-items: center;
-}
-
-nav ul li a {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  gap: 8px;
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  padding: 8px 0px;
-  border-radius: 4px;
-}
-
-nav ul li a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-mat-icon {
-  font-size: 22px;
-  vertical-align: middle;
-}
-
-.menu-toggle-button {
-  display: none;
 }
 
 @media (max-width: 768px) {
-  .menu-toggle-button {
-    display: block;
-  }
+  .sidenavbar mat-nav-list {
+    padding: 8px;
 
-  nav ul {
-    display: none;
+    a.mat-list-item {
+      padding: 12px;
+      font-size: 16px;
+
+      &.active-list-item {
+        background-color: #ffffff;
+        color: #007bff;
+        font-weight: bold;
+
+        mat-icon {
+          color: #007bff;
+        }
+      }
+    }
   }
 }

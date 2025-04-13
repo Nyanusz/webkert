@@ -16,21 +16,20 @@ import {MatSidenav} from '@angular/material/sidenav';
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
-export class MenuComponent implements OnInit, AfterViewInit{
+export class MenuComponent implements OnInit{
   @Input() sidenav!: MatSidenav;
   @Input() isLoggedIn: boolean = false;
   @Output() logoutEvent = new EventEmitter<void>();
 
   constructor() {
-    console.log("menu meghivva")
   }
 
-  ngOnInit() {
-    console.log("ngOnInit meghivva")
+  ngOnInit(): void {
+    this.checkLoginStatus();
   }
 
-  ngAfterViewInit() {
-    console.log("ngAfterViewInit meghivva")
+  checkLoginStatus(): void {
+    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   }
 
   closeMenu(){

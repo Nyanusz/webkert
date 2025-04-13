@@ -1,3 +1,4 @@
+
 <mat-sidenav-container>
   <mat-sidenav #sidenav>
     <app-menu [sidenav]="sidenav"></app-menu>
@@ -10,8 +11,8 @@
         class="menu-toggle-button">
         <mat-icon>menu</mat-icon>
       </button>
-      <img class="logo" src="img/logo3.png" alt="asd">
-      <span style="font-size: 18px; font-weight: 500;">SoundClone</span>
+      <a routerLink="/home"><img class="logo" src="img/logo3.png" alt="asd"></a>
+      <span style="font-size: 18px; font-weight: 500;"><a routerLink="/home">SoundClone</a></span>
       <nav>
         <ul>
           <li><a routerLink="/home">
@@ -19,7 +20,7 @@
 
           @if (isLoggedIn) {
             <li><a routerLink="/upload">
-              <mat-icon matListItemIcon></mat-icon>
+              <mat-icon matListItemIcon>music_note_add</mat-icon>
               Feltöltés</a></li>
           }
 
@@ -36,7 +37,7 @@
           }
           @if (!isLoggedIn) {
             <li><a routerLink="/signup">
-              <mat-icon matListItemIcon>login</mat-icon>
+              <mat-icon matListItemIcon>person_add</mat-icon>
               Regisztráció</a></li>
           }
 
@@ -48,7 +49,7 @@
         </ul>
       </nav>
     </mat-toolbar>
-    <router-outlet />
+    <router-outlet/>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

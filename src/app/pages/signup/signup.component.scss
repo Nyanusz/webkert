@@ -5,37 +5,128 @@
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
-}
+  background-color: #ffffff;
 
-.signup-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+  h1 {
+    font-size: 1.8rem;
+    color: #000000;
+    margin-bottom: 24px;
+  }
 
-.name-row {
-  display: flex;
-  gap: 16px;
-}
-
-.buttons-row {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-/* Responsive design */
-@media (max-width: 576px) {
-  .name-row, .buttons-row {
+  .signup-form {
+    display: flex;
     flex-direction: column;
+    gap: 16px;
+
+    mat-form-field {
+      width: 100%;
+
+      mat-label {
+        color: #000000;
+      }
+
+      input {
+        color: #333;
+      }
+
+      mat-icon {
+        color: #000000;
+      }
+
+      mat-error {
+        color: #d32f2f;
+        font-size: 0.8rem;
+      }
+    }
+
+    .name-row {
+      display: flex;
+      gap: 16px;
+
+      mat-form-field {
+        flex: 1;
+      }
+    }
+
+    .buttons-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .error-message {
+      color: #d32f2f;
+      font-size: 0.9rem;
+      margin-top: 16px;
+      text-align: center;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    min-height: 200px;
+
+    h2 {
+      font-size: 1.2rem;
+      color: #000000;
+    }
+
+    mat-spinner {
+      margin: 16px 0;
+      ::ng-deep .mat-mdc-progress-spinner circle {
+        stroke: #2b69ff;
+      }
+    }
+
+    p {
+      font-size: 1rem;
+      color: #333;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .signup-container {
+      margin: 20px auto;
+      padding: 16px;
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .signup-form {
+        gap: 12px;
+
+        .name-row {
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .buttons-row {
+          flex-direction: column;
+
+          button {
+            width: 100%;
+          }
+        }
+
+        mat-error {
+          font-size: 0.7rem;
+        }
+
+        .error-message {
+          font-size: 0.8rem;
+          margin-top: 12px;
+        }
+      }
+
+      .loading-container {
+        min-height: 150px;
+      }
+    }
   }
 }

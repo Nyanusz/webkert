@@ -24,17 +24,14 @@ export const routes: Routes = [
     path: 'signup',
     loadComponent: () => import('./pages/signup/signup.component').then(m => m.SignupComponent)
   },
+
+  {
+    path: 'zene/:id',
+    loadComponent: () => import('./pages/zeneinfo/zeneinfo.component').then(m => m.ZeneinfoComponent)
+  },
   {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
-  },
-  {
-    path: '**',
-    loadComponent: () => import('./shared/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent)
-  },
-  {
-    path: 'zene/:id',
-    loadComponent: () => import('./pages/zeneinfo/zeneinfo.component').then(m => m.ZeneinfoComponent)
   }
 ];

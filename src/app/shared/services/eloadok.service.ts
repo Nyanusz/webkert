@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Zenek } from '../models/Zenek';
-import { Observable, of } from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Eloado} from '../models/Eloado';
 
 @Injectable({
@@ -12,11 +11,13 @@ export class EloadokService {
     { id: 2, nev: 'Lieless', mufaj: 'Rave', zenek: [] }
   ];
 
+  private eloadokSubject = new BehaviorSubject<Eloado[]>(this.eloado);
+  eloado$ = this.eloadokSubject.asObservable();
   getEloado(): Observable<Eloado[]> {
-    return of(this.eloado);
+    return this.eloado$;
   }
 
-  addSong(eloado: Eloado): Observable<Eloado> {
+  addEloado(eloado: Eloado): Observable<Eloado> {
     const newEloado = { ...eloado, id: this.eloado.length + 1 };
     this.eloado.push(newEloado);
     return of(newEloado);

@@ -1,13 +1,13 @@
-<mat-nav-list>
+<mat-nav-list class="sidenavbar">
   <a mat-list-item routerLink="/home" routerLinkActive="active-list-item" (click)="closeMenu()">
     <mat-icon matListItemIcon>home</mat-icon>
-    <span matListItemTitle>Home</span>
+    <span matListItemTitle>Főoldal</span>
   </a>
   @if(isLoggedIn){
-  <a mat-list-item routerLink="/upload" routerLinkActive="active-list-item" (click)="closeMenu()">
-    <mat-icon matListItemIcon>vertical_align_top</mat-icon>
-    <span matListItemTitle>Feltöltés</span>
-  </a>
+    <a mat-list-item routerLink="/upload" routerLinkActive="active-list-item" (click)="closeMenu()">
+      <mat-icon matListItemIcon>arrow_circle_up</mat-icon>
+      <span matListItemTitle>Feltöltés</span>
+    </a>
   }
   @if (isLoggedIn) {
     <a mat-list-item routerLink="/profile" routerLinkActive="active-list-item" (click)="closeMenu()">

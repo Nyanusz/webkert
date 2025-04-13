@@ -1,0 +1,56 @@
+.container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.newSongForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.name-row {
+  display: flex;
+  gap: 16px;
+}
+
+.buttons-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+mat-card {
+  max-width: 400px;
+  margin: 16px auto;
+  padding: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.submitbtn{
+  width: 45%;
+  border: 2px solid palegreen;
+  border-radius: 20px;
+  background-color: #8f8ff8;
+}
+.submitbtn:hover{
+  transition-duration: 3s;
+
+  background-color: #bbdd9c;
+}
+
+/* Responsive design */
+@media (max-width: 576px) {
+  .name-row, .buttons-row {
+    flex-direction: column;
+  }
+}

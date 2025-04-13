@@ -3,6 +3,6 @@ export interface Zenek {
   cim: string;
   eloadoId: number;
   albumId: number;
-  artistNev: string
+  artistNev?: string
   hossz: number; // masodpercben
 }

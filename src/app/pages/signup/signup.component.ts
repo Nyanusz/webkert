@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,7 +23,7 @@ import { User } from '../../shared/models/User';
     RouterLink
   ],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss'
+  styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent {
   signUpForm = new FormGroup({
@@ -34,7 +34,7 @@ export class SignupComponent {
       firstname: new FormControl('', [Validators.required, Validators.minLength(2)]),
       lastname: new FormControl('', [Validators.required, Validators.minLength(2)])
     })
-  });
+  }, { validators: this.passwordMatchValidator() });
 
   isLoading = false;
   showForm = true;
@@ -42,16 +42,22 @@ export class SignupComponent {
 
   constructor(private router: Router) {}
 
+
+  passwordMatchValidator(): ValidatorFn {
+    return (form: AbstractControl): { [key: string]: any } | null => {
+      const password = form.get('password')?.value;
+      const rePassword = form.get('rePassword')?.value;
+      return password && rePassword && password !== rePassword
+        ? { passwordMismatch: true }
+        : null;
+    };
+  }
+
   signup(): void {
+    this.signupError = '';
+
     if (this.signUpForm.invalid) {
-      this.signupError = 'Please correct the form errors before submitting.';
-      return;
-    }
-
-    const password = this.signUpForm.get('password');
-    const rePassword = this.signUpForm.get('rePassword');
-
-    if (password?.value !== rePassword?.value) {
+      this.signupError = 'Kérlek javítsd az adataidat, mielőtt regisztrálsz.';
       return;
     }
 
@@ -71,8 +77,13 @@ export class SignupComponent {
     console.log('New user:', newUser);
     console.log('Form value:', this.signUpForm.value);
 
+
+    // Szimulált szerverhívás
     setTimeout(() => {
-      this.router.navigateByUrl('/home');
-    }, 2000);
+      this.isLoading = true;
+      this.showForm = false;
+      this.router.navigateByUrl('/login'); // Sikeres regisztráció után átirányítás
+
+    }, 2);
   }
 }

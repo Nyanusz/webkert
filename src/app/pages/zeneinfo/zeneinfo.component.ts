@@ -5,6 +5,7 @@ import {ZenekService} from '../../shared/services/zenek.service';
 import {MatCard, MatCardContent, MatCardTitle} from '@angular/material/card';
 import {ZenehosszPipe} from '../../shared/pipes/zenehossz.pipe';
 import {NgIf} from '@angular/common';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-zeneinfo',
@@ -23,14 +24,28 @@ export class ZeneinfoComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private songService: ZenekService
+    private songService: ZenekService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.songService.getSongById(id).subscribe(song => {
-      this.zene = song;
-    });
-  }
+    console.log(id)
 
+    if (id) {
+      this.songService.getSongById(id).subscribe({
+        next: (song) => {
+          this.zene = song;
+          if (!song) {
+            this.snackBar.open('A keresett dal nem található!', 'OK', { duration: 3000 });
+          }
+        },
+        error: () => {
+          this.snackBar.open('Hiba történt a dal betöltésekor!', 'OK', { duration: 3000 });
+        }
+      });
+    } else {
+      this.snackBar.open('Érvénytelen dal azonosító!', 'OK', { duration: 3000 });
+    }
+  }
 }

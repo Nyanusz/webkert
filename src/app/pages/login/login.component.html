@@ -1,25 +1,35 @@
-<mat-card>
-  <form [formGroup]="loginForm" (ngSubmit)="login()">
+<mat-card class="login-container">
+  @if (isLoading) {
+    <div class="loading-container">
+      <h2>Bejelentkezés folyamatban</h2>
+      <mat-spinner diameter="20"></mat-spinner>
+      <p>Kérlek várj...</p>
+    </div>
+  }
+  <mat-card-title><h1>Bejelentkezési felület</h1></mat-card-title>
+  <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email">
+      <input matInput formControlName="email" type="email" placeholder="email = test@gmail.com">
       <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-        Email is required
+        Email kitöltése kötelező!
       </mat-error>
       <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-        Invalid email address
+        Érvénytelen e-mail cím!
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Password</mat-label>
-      <input matInput formControlName="password" type="password">
+      <input matInput formControlName="password" type="password" placeholder="jelszó = test">
       <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-        Password is required
+        Jelszó kitöltése kötelező!
       </mat-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
+      Bejelentkezés
+    </button>
   </form>
   <mat-error *ngIf="error">{{ error }}</mat-error>
 </mat-card>

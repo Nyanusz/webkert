@@ -1,14 +1,30 @@
-<mat-card>
-  <mat-card-title>Új dal</mat-card-title>
+
+<div class="container">
+<mat-card class="newSongForm">
+  <mat-card-title style="font-size: 25px; font-weight: bold" >Új dal hozzáadása</mat-card-title>
   <form [formGroup]="songForm" (ngSubmit)="onSubmit()">
     <mat-form-field>
       <mat-label>Cím</mat-label>
-      <input matInput formControlName="title">
+      <input matInput formControlName="cim">
     </mat-form-field>
     <mat-form-field>
       <mat-label>Hossz (mp)</mat-label>
-      <input matInput type="number" formControlName="duration">
+      <input matInput type="number" formControlName="hossz">
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit">Hozzáad</button>
+    <mat-form-field>
+      <mat-label>Előadó</mat-label>
+      <mat-select formControlName="eloadoId" placeholder="Válassz előadót">
+        <mat-option *ngFor="let eloado of eloadok" [value]="eloado.id">
+          {{ eloado.nev }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="songForm.get('eloadoId')?.hasError('required')">
+        Az előadó kiválasztása kötelező!
+      </mat-error>
+    </mat-form-field>
+
+    <button class="submitbtn" mat-raised-button color="primary"
+            type="submit">Hozzáad</button>
   </form>
 </mat-card>
+</div>
