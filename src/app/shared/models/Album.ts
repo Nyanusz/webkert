@@ -1,6 +1,6 @@
 export interface Album {
-  id: number;
+  id: string;
   cim: string;
-  eloadoId: number;
+  eloadoId: string;
   megjelenesiEv: number;
 }

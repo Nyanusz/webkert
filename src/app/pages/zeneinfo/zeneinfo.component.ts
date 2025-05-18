@@ -1,11 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Zenek} from '../../shared/models/Zenek';
-import {ActivatedRoute} from '@angular/router';
-import {ZenekService} from '../../shared/services/zenek.service';
-import {MatCard, MatCardContent, MatCardTitle} from '@angular/material/card';
-import {ZenehosszPipe} from '../../shared/pipes/zenehossz.pipe';
+import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
 import {NgIf} from '@angular/common';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {ZenehosszPipe} from '../../shared/pipes/zenehossz.pipe';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-zeneinfo',
@@ -13,39 +11,32 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     MatCard,
     MatCardTitle,
     MatCardContent,
+    NgIf,
+    MatCardActions,
     ZenehosszPipe,
-    NgIf
+    MatButton
   ],
   templateUrl: './zeneinfo.component.html',
   styleUrl: './zeneinfo.component.scss'
 })
-export class ZeneinfoComponent implements OnInit {
-  zene: Zenek | undefined;
+export class ZeneinfoComponent {
+  @Input() song?: Zenek;
+  @Output() delete = new EventEmitter<string>();
+  @Output() select = new EventEmitter<Zenek>();
+  @Output() edit = new EventEmitter<Zenek>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private songService: ZenekService,
-    private snackBar: MatSnackBar
-  ) {}
+  onDelete() {
+    if(this.song?.id)
+    this.delete.emit(this.song.id);
+  }
 
-  ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    console.log(id)
+  onSelect() {
+    if (this.song)
+    this.select.emit(this.song);
+  }
 
-    if (id) {
-      this.songService.getSongById(id).subscribe({
-        next: (song) => {
-          this.zene = song;
-          if (!song) {
-            this.snackBar.open('A keresett dal nem található!', 'OK', { duration: 3000 });
-          }
-        },
-        error: () => {
-          this.snackBar.open('Hiba történt a dal betöltésekor!', 'OK', { duration: 3000 });
-        }
-      });
-    } else {
-      this.snackBar.open('Érvénytelen dal azonosító!', 'OK', { duration: 3000 });
-    }
+  onEdit() {
+    if (this.song)
+    this.edit.emit(this.song);
   }
 }

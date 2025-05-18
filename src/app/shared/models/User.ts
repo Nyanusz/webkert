@@ -1,13 +1,12 @@
 
-import {Zenek} from './Zenek';
-
 export interface User {
+  email: string;
+  id: string;
   name: {
     firstname: string;
     lastname: string;
   };
-  email: string;
-  password: string;
-  zenek: Zenek[];
-  
+  zenek: string[];
+  kedveltZenei: string[];
+
 }

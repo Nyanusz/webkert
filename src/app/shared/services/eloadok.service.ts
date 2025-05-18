@@ -7,8 +7,8 @@ import {Eloado} from '../models/Eloado';
 })
 export class EloadokService {
   private eloado: Eloado[] = [
-    { id: 1, nev: 'Pitbull', mufaj: 'Pop', zenek: [] },
-    { id: 2, nev: 'Lieless', mufaj: 'Rave', zenek: [] }
+    { id: '1', nev: 'Pitbull', desc : 'Valami' , zenek: [] },
+    { id: '2', nev: 'Lieless', desc: 'Igen ő az' , zenek: [] }
   ];
 
   private eloadokSubject = new BehaviorSubject<Eloado[]>(this.eloado);
@@ -16,7 +16,7 @@ export class EloadokService {
   getEloado(): Observable<Eloado[]> {
     return this.eloado$;
   }
-
+/*
   addEloado(eloado: Eloado): Observable<Eloado> {
     const newEloado = { ...eloado, id: this.eloado.length + 1 };
     this.eloado.push(newEloado);
@@ -26,4 +26,6 @@ export class EloadokService {
   getEloadoById(id: number): Observable<Eloado | undefined> {
     return of(this.eloado.find(song => song.id === id));
   }
+
+ */
 }

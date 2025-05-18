@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {MenuComponent} from './shared/menu/menu.component';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
@@ -7,6 +7,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatListItemIcon} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
 import {Zenek} from './shared/models/Zenek';
+import {user} from '@angular/fire/auth';
+import {AuthService} from './shared/services/auth-guard.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,25 +26,25 @@ import {Zenek} from './shared/models/Zenek';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent  implements OnInit, OnDestroy{
   title = 'webkert';
   isLoggedIn = false;
-
-  constructor() {
+  private authSubcription?: Subscription;
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.checkLoginStatus();
+  this.authSubcription = this.authService.
+  currentUser.subscribe(user => {
+    this.isLoggedIn = !!user;
+    localStorage.setItem('isLoggedIn', this.isLoggedIn ? 'true' : 'false');
+    });
+
   }
 
-  checkLoginStatus(): void {
-    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  }
 
   logout(): void {
-    localStorage.setItem('isLoggedIn', 'false');
-    this.isLoggedIn = false;
-    window.location.href = '/home';
+    this.authService.logout();
   }
 
   onToggleSidenav(sidenav: MatSidenav){
@@ -55,7 +58,7 @@ export class AppComponent {
   eredmenyZenek: Zenek | null = null;
 
   hozzaAd(zene: Zenek) {
-    this.zenek.push({ ...zene, id: this.zenek.length + 1 });
+    this.zenek.push({ ...zene, id: '' });
     this.szurtZenek = [...this.zenek];
   }
 
@@ -67,5 +70,10 @@ export class AppComponent {
 
   zeneListaz(zene: Zenek) {
     this.eredmenyZenek = zene;
+  }
+
+
+  ngOnDestroy() {
+    this.authSubcription?.unsubscribe();
   }
 }

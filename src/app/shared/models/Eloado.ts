@@ -1,8 +1,8 @@
 import {Zenek} from './Zenek';
 
 export interface Eloado {
-  id: number;
+  id: string;
   nev: string;
-  mufaj: string;
-  zenek: Zenek[]
+  desc: string;
+  zenek: string[]
 }

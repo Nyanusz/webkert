@@ -1,10 +1,8 @@
-import {Zenek} from './Zenek';
 import {User} from './User';
 
 export interface Playlist {
-  id: number
+  id: string
   nev: string;
-  letrehozta: User;
-  zenek: Zenek[];
-
+  zenek: string[];
+  userId: string;
 }

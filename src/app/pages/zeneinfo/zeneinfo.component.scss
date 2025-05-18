@@ -12,6 +12,10 @@ mat-card {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   background-color: #ffffff;
+  mat-card {
+    max-width: 400px;
+    margin: 10px auto;
+  }
 
   mat-card-title {
     font-size: 1.5rem;

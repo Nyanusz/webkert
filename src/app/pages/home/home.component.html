@@ -20,12 +20,15 @@
           [ngClass]="{'selected': song.id === selectedSong?.id}">
           <img style="width: 5%; margin-right: 20px" src="img/default_album_cover.png">
 
-          <span>{{ song.artistNev }} - {{ song.cim }}  |  {{ song.hossz | zenehossz}} </span>
+          <span>{{ song.eloadoId }} - {{ song.cim }}  |  {{ song.hossz | zenehossz}} </span>
 
           <mat-icon>play_arrow</mat-icon>
           <mat-divider></mat-divider>
         </mat-list-item>
       </mat-list>
+
+      <button mat-raised-button color="primary" type="button" routerLink="/playlist">Közös playlist</button>
+
     </mat-card>
   </div>
 </section>

@@ -1,98 +1,56 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {MatCard, MatCardTitle} from '@angular/material/card';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import { Component } from '@angular/core';
+import {FormGroup, FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
+import { ZenekService } from '../../shared/services/zenek.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatOption} from '@angular/material/core';
+import {NgIf} from '@angular/common';
+import {MatSelect} from '@angular/material/select';
 import {MatButton} from '@angular/material/button';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Zenek} from '../../shared/models/Zenek';
-import {ZenekService} from '../../shared/services/zenek.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatSelectModule} from '@angular/material/select';
-import {Eloado} from '../../shared/models/Eloado';
-import {EloadokService} from '../../shared/services/eloadok.service';
-import {NgFor, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-upload',
+
   imports: [
-    MatCard,
-    MatCardTitle,
-    MatLabel,
-    MatInput,
-    MatButton,
     ReactiveFormsModule,
-    MatFormField,
-    MatSelectModule,
-    NgFor,
-    NgIf
-
-
+    MatLabel,
+    MatError,
+    MatOption,
+    MatSelect,
+    NgIf,
+    MatButton,
+    MatInput,
+    MatFormField
   ],
   templateUrl: './upload.component.html',
-  styleUrl: './upload.component.scss'
+  styleUrls: ['./upload.component.scss']
 })
-export class UploadComponent implements OnInit{
-  songForm: FormGroup;
-  eloadok: Eloado[] = [];
+export class UploadComponent {
+  form = new FormGroup({
+    cim: new FormControl('', Validators.required),
+    eloadoId: new FormControl('', Validators.required),
+    albumId: new FormControl('', Validators.required),
+    hossz: new FormControl(0, [Validators.required, Validators.min(1)]),
+    mufaj: new FormControl('', Validators.required)
+  });
 
-  constructor(private fb: FormBuilder,
-              private songService: ZenekService,
-              private eloadokService: EloadokService,
-              private snackBar: MatSnackBar ) {
-    this.songForm = this.fb.group({
-      cim: ['', Validators.required],
-      hossz: [0, [Validators.required, Validators.min(1)]],
-      eloadoId: ['', [Validators.required]]
-    });
-  }
+  constructor(private songService: ZenekService, private snackBar: MatSnackBar) {}
 
-  ngOnInit() {
-    // Előadók betöltése
-    this.eloadokService.getEloado().subscribe({
-      next: (eloadok) => {
-        this.eloadok = eloadok;
-      },
-      error: (err) => {
-        console.error('Hiba az előadók betöltésekor:', err);
-        this.snackBar.open('Nem sikerült betölteni az előadókat.', 'OK', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
-      }
-    });
-  }
   onSubmit() {
-    if (this.songForm.valid) {
-      const selectedEloado = this.eloadok.find(
-        (eloado) => eloado.id === this.songForm.value.eloadoId
-      );
-      const song: Zenek = {
-        id: 0,
-        cim: this.songForm.value.cim,
-        eloadoId: this.songForm.value.eloadoId,
-        albumId: 1,
-        hossz: this.songForm.value.hossz,
-        artistNev: selectedEloado ? selectedEloado.nev : 'Ismeretlen'
+    if (this.form.valid) {
+      const zenek: Zenek = {
+        cim: this.form.value.cim!,
+        eloadoId: this.form.value.eloadoId!,
+        albumId: this.form.value.albumId!,
+        hossz: this.form.value.hossz!,
+        mufaj: this.form.value.mufaj!
       };
-      this.songService.addSong(song).subscribe({
-        next: () => {
-          this.snackBar.open('Dal sikeresen feltöltve!', 'OK', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-          this.songForm.reset({ cim: '', hossz: 0, eloadoId: '' });
-        },
-        error: (err) => {
-          console.error('Hiba a feltöltéskor:', err);
-          this.snackBar.open('Nem sikerült feltölteni a dalt.', 'OK', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
-        }
-      });
-    } else {
-      this.snackBar.open('Kérjük, töltse ki az összes mezőt helyesen!', 'OK', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
+      this.songService.addSong(zenek).then(() => {
+        this.snackBar.open('Dal hozzáadva!', 'OK', { duration: 3000 });
+        this.form.reset();
+      }).catch(error => {
+        this.snackBar.open('Hiba a dal hozzáadása közben!', 'OK', { duration: 3000 });
       });
     }
   }

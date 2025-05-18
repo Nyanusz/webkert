@@ -1,11 +1,14 @@
-<mat-card *ngIf="zene">
-  <mat-card-title>{{ zene.cim }}</mat-card-title>
+<mat-card *ngIf="song" class="song-card">
+  <mat-card-title>{{ song.cim }}</mat-card-title>
   <mat-card-content>
-    <p>Hossz: {{ zene.hossz | zenehossz }}</p>
-    <p>Előadó: {{ zene.artistNev }}</p>
-    <p>Album ID: {{ zene.albumId }}</p>
+    <p><strong>Műfaj:</strong> {{ song.mufaj }}</p>
+    <p><strong>Hossz:</strong> {{ song.hossz | zenehossz }}</p>
+    <p><strong>Előadó ID:</strong> {{ song.eloadoId }}</p>
+    <p><strong>Album ID:</strong> {{ song.albumId }}</p>
   </mat-card-content>
+  <mat-card-actions>
+    <button mat-button color="primary" (click)="onSelect()">Kiválaszt</button>
+    <button mat-button color="accent" (click)="onEdit()">Szerkeszt</button>
+    <button mat-button color="warn" (click)="onDelete()">Töröl</button>
+  </mat-card-actions>
 </mat-card>
-<div *ngIf="!zene" class="not-found">
-  <p>A keresett dal nem található.</p>
-</div>

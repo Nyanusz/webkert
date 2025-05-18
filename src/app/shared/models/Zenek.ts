@@ -1,8 +1,8 @@
 export interface Zenek {
-  id: number;
+  id?: string;
   cim: string;
-  eloadoId: number;
-  albumId: number;
-  artistNev?: string
+  eloadoId: string;
+  albumId: string
+  mufaj: string;
   hossz: number; // masodpercben
 }

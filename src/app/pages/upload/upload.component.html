@@ -1,30 +1,34 @@
-
-<div class="container">
-<mat-card class="newSongForm">
-  <mat-card-title style="font-size: 25px; font-weight: bold" >Új dal hozzáadása</mat-card-title>
-  <form [formGroup]="songForm" (ngSubmit)="onSubmit()">
-    <mat-form-field>
-      <mat-label>Cím</mat-label>
-      <input matInput formControlName="cim">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Hossz (mp)</mat-label>
-      <input matInput type="number" formControlName="hossz">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Előadó</mat-label>
-      <mat-select formControlName="eloadoId" placeholder="Válassz előadót">
-        <mat-option *ngFor="let eloado of eloadok" [value]="eloado.id">
-          {{ eloado.nev }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="songForm.get('eloadoId')?.hasError('required')">
-        Az előadó kiválasztása kötelező!
-      </mat-error>
-    </mat-form-field>
-
-    <button class="submitbtn" mat-raised-button color="primary"
-            type="submit">Hozzáad</button>
-  </form>
-</mat-card>
-</div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Cím</mat-label>
+    <input matInput formControlName="cim">
+    <mat-error *ngIf="form.get('cim')?.hasError('required')">Kötelező</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Előadó ID</mat-label>
+    <input matInput formControlName="eloadoId">
+    <mat-error *ngIf="form.get('eloadoId')?.hasError('required')">Kötelező</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Album ID</mat-label>
+    <input matInput formControlName="albumId">
+    <mat-error *ngIf="form.get('albumId')?.hasError('required')">Kötelező</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Hossz (másodperc)</mat-label>
+    <input matInput type="number" formControlName="hossz">
+    <mat-error *ngIf="form.get('hossz')?.hasError('required')">Kötelező</mat-error>
+    <mat-error *ngIf="form.get('hossz')?.hasError('min')">Legalább 1</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Műfaj</mat-label>
+    <mat-select formControlName="mufaj">
+      <mat-option value="pop">Pop</mat-option>
+      <mat-option value="rock">Rock</mat-option>
+      <mat-option value="dubstep">Dubstep</mat-option>
+      <mat-option value="rock">Metal</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('mufaj')?.hasError('required')">Kötelező</mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Hozzáadás</button>
+</form>

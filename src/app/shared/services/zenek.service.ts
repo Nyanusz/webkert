@@ -1,57 +1,64 @@
 import { Injectable } from '@angular/core';
+import { Firestore, collection, addDoc, collectionData, doc, updateDoc, deleteDoc, query, where, orderBy, limit, startAfter } from '@angular/fire/firestore';
+import {catchError, map, Observable, tap, throwError} from 'rxjs';
 import { Zenek } from '../models/Zenek';
-import {BehaviorSubject, Observable, of} from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ZenekService {
-  private songs: Zenek[] = this.loadSongsFromStorage();
+  constructor(private firestore: Firestore) {}
 
-  private songsSubject = new BehaviorSubject<Zenek[]>(this.songs);
-  songs$ = this.songsSubject.asObservable();
-
-  constructor() {
-    this.songs = this.loadSongsFromStorage();
-    this.songsSubject.next(this.songs);
-  }
-
-  private loadSongsFromStorage(): Zenek[] {
-    const storedSongs = localStorage.getItem('songs');
-    return storedSongs
-      ? JSON.parse(storedSongs)
-      : [
-        { id: 1, cim: 'Dal 1', eloadoId: 1, artistNev: 'Pitbull', albumId: 1, hossz: 180 },
-        { id: 2, cim: 'Dal 2', eloadoId: 2, artistNev: 'Lieless', albumId: 2, hossz: 240 }
-      ];
-  }
-
-  private saveSongsToStorage() {
-    localStorage.setItem('songs', JSON.stringify(this.songs));
+  addSong(zenek: Zenek): Promise<void> {
+    return addDoc(collection(this.firestore, 'zenek'), zenek).then(() => {});
   }
 
   getSongs(): Observable<Zenek[]> {
-    const validSongs = this.songs.filter(song => !!song.cim);
-    this.songsSubject.next(validSongs);
-    return this.songs$;
+    return collectionData(collection(this.firestore, 'zenek'), { idField: 'id' }) as Observable<Zenek[]>;
   }
 
-  addSong(song: Zenek): Observable<Zenek> {
-    if (!song.cim) {
-      console.error('Hiba: A dal cím kötelező!', song);
-      throw new Error('A dal cím kötelező!');
-    }
-    const newSong: Zenek = {
-      ...song,
-      id: this.songs.length + 1,
-      artistNev: song.artistNev || 'Ismeretlen'
-    };
-    this.songs.push(newSong);
-    this.songsSubject.next([...this.songs]);
-    return of(newSong);
+  updateSong(id: string, zenek: Partial<Zenek>): Promise<void> {
+    return updateDoc(doc(this.firestore, 'zenek', id), zenek);
   }
 
-  getSongById(id: number): Observable<Zenek | undefined> {
-    return of(this.songs.find(song => song.id === id));
+  deleteSong(id: string): Promise<void> {
+    return deleteDoc(doc(this.firestore, 'zenek', id));
+  }
+
+  getPopSongs(): Observable<Zenek[]> {
+    const q = query(collection(this.firestore, 'zenek'), where('mufaj', '==', 'pop'), orderBy('cim'), limit(10));
+    return collectionData(q, { idField: 'id' }) as Observable<Zenek[]>;
+  }
+
+  getSortedSongs(): Observable<Zenek[]> {
+    const q = query(collection(this.firestore, 'zenek'), orderBy('cim'));
+    return collectionData(q, { idField: 'id' }) as Observable<Zenek[]>;
+  }
+
+  getRecentSongs(): Observable<Zenek[]> {
+    const q = query(collection(this.firestore, 'zenek'), limit(5));
+    return collectionData(q, { idField: 'id' }).pipe(
+      map(docs => docs.map(doc => ({
+        id: doc.id,
+        cim: doc['cim'] || '',
+        eloadoId: doc['eloadoId'] || '',
+        albumId: doc['albumId'] || '',
+        hossz: doc['hossz'] || 0,
+        mufaj: doc['mufaj'] || ''
+      } as Zenek))),
+      tap(songs => console.log('Legutóbbi dalok:', songs)),
+      catchError(error => {
+        console.error('Hiba a legutóbbi dalok lekérdezésekor:', error);
+        return throwError(() => new Error('Hiba a legutóbbi dalok lekérdezésekor'));
+      })
+    );
+  }
+
+  getPaginatedSongs(lastDoc: any): Observable<Zenek[]> {
+    const q = query(collection(this.firestore, 'zenek'), orderBy('cim'), startAfter(lastDoc), limit(10));
+    return collectionData(q, { idField: 'id' }) as Observable<Zenek[]>;
+  }
+
+  getSongsByAlbum(albumId: string): Observable<Zenek[]> {
+    const q = query(collection(this.firestore, 'zenek'), where('albumId', '==', albumId));
+    return collectionData(q, { idField: 'id' }) as Observable<Zenek[]>;
   }
 }

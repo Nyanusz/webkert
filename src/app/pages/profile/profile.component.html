@@ -1,11 +1,47 @@
-<div class="profile-container">
-  <h1>Profilom</h1>
+<mat-toolbar color="primary">
+  <span>Profil</span>
+</mat-toolbar>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Név</mat-label>
+    <input matInput formControlName="name">
+    <mat-error *ngIf="form.get('name')?.hasError('required')">Kötelező</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email">
+    <mat-error *ngIf="form.get('email')?.hasError('required')">Kötelező</mat-error>
+    <mat-error *ngIf="form.get('email')?.hasError('email')">Érvénytelen email</mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Mentés</button>
+  <button mat-button (click)="authService.logout()">Kijelentkezés</button>
+</form>
 
-  <mat-card class="profile-card">
-    <mat-card-title>{{ user.name.firstname }} {{ user.name.lastname }}</mat-card-title>
-    <mat-card-content>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Felhasználónév:</strong> {{ user.name.firstname.toLowerCase() }}{{ user.name.lastname.toLowerCase() }}</p>
-    </mat-card-content>
-  </mat-card>
+
+
+<div *ngIf="user$ | async as user; else notLoggedIn">
+
+  <mat-form-field>
+    <mat-label>Műfaj szűrő</mat-label>
+    <mat-select [(ngModel)]="selectedGenre">
+      <mat-option value="">Összes</mat-option>
+      <mat-option value="pop">Pop</mat-option>
+      <mat-option value="rock">Rock</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="zenek$ | async as zenek">
+    <mat-list *ngIf="zenek.length > 0; else noSongs">
+      <mat-list-item *ngFor="let zene of zenek | genreFilter:selectedGenre">
+        {{ zene.cim }} - {{ zene.mufaj }}
+        <button mat-icon-button (click)="deleteSong(zene.id || '')"><mat-icon>delete</mat-icon></button>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <ng-template #noSongs>
+    <p>Nincsenek dalok.</p>
+  </ng-template>
 </div>
+<ng-template #notLoggedIn>
+  <p>Kérjük, jelentkezz be!</p>
+  <a mat-button routerLink="/login">Bejelentkezés</a>
+</ng-template>

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {MatCard, MatCardImage, MatCardSmImage, MatCardTitle} from '@angular/material/card';
 import {MatDivider, MatList, MatListItem} from '@angular/material/list';
 import {MatIcon} from '@angular/material/icon';
@@ -15,7 +15,7 @@ import {combineLatest, map} from 'rxjs';
 @Component({
   selector: 'app-home',
   imports: [MatButtonModule, MatCardTitle, MatList, MatListItem,
-    MatIcon, FilterComponent, NgClass, MatDivider, MatCard, NgForOf, ZenehosszPipe],
+    MatIcon, FilterComponent, NgClass, MatDivider, MatCard, NgForOf, ZenehosszPipe, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -57,8 +57,8 @@ export class HomeComponent implements OnInit {
   applyFilter(filter: string) {
     this.filteredSongs = this.zenek.filter(song => {
       const cimMatch = song.cim ? song.cim.toLowerCase().includes(filter.toLowerCase()) : false;
-      const artistMatch = song.artistNev ? song.artistNev.toLowerCase().includes(filter.toLowerCase()) : false;
-      return cimMatch || artistMatch;
+      //const artistMatch = song.artistNev ? song.artistNev.toLowerCase().includes(filter.toLowerCase()) : false;
+      return cimMatch;
     });
   }
 
