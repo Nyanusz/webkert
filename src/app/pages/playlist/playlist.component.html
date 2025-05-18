@@ -1,0 +1,25 @@
+<mat-toolbar color="primary">
+  <span>Lejátszási lista</span>
+</mat-toolbar>
+<div *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+  <p>Dalok betöltése...</p>
+</div>
+<div *ngIf="errorMessage">
+  <p>{{ errorMessage }}</p>
+</div>
+<div *ngIf="!isLoading && !errorMessage">
+  <mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="cim">
+      <mat-header-cell *matHeaderCellDef>Cím</mat-header-cell>
+      <mat-cell *matCellDef="let song">{{ song.cim }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="mufaj">
+      <mat-header-cell *matHeaderCellDef>Műfaj</mat-header-cell>
+      <mat-cell *matCellDef="let song">{{ song.mufaj }}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10]"></mat-paginator>
+</div>
